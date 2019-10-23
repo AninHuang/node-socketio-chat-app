@@ -15,5 +15,19 @@ app.use(express.static('public'));
 var io = socket(server);
 
 io.on('connection', function(socket) {
-  console.log('socket connection');
+  console.log('socket connection', socket.id);
+  // Refresh the page each time, the socket.id would be distinct
+
+  // step2
+  socket.on('chat', function(data) {
+    io.emit('chat', data);
+  });
+
+  socket.on('typing', function(data) {
+    socket.broadcast.emit('typing', data)
+  });
+
+  socket.on('endtyping', function(data) {
+    socket.broadcast.emit('endtyping', data)
+  });
 });
